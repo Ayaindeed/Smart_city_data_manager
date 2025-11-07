@@ -1,0 +1,9 @@
+<jboss-deployment-structure>
+    <deployment>
+        <!-- Configuration minimale pour coexister avec d'autres applications -->
+        <exclusions>
+            <module name="org.slf4j"/>
+            <module name="org.apache.commons.logging"/>
+        </exclusions>
+    </deployment>
+</jboss-deployment-structure>

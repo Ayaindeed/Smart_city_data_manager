@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.0">
+    <persistence-unit name="smartCityPU" transaction-type="RESOURCE_LOCAL">
+        <class>smartcity.model.Sensor</class>
+        <class>smartcity.model.Measurement</class>
+
+        <properties>
+            <!-- Configuration MySQL -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/smartcitydata?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
+            <property name="hibernate.connection.username" value="smart_user"/>
+            <property name="hibernate.connection.password" value="smart_pwd"/>
+            
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            
+            <!-- Configuration du pool de connexions -->
+            <property name="hibernate.connection.pool_size" value="10"/>
+            <property name="hibernate.jdbc.batch_size" value="50"/>
+            <property name="hibernate.order_inserts" value="true"/>
+            <property name="hibernate.order_updates" value="true"/>
+            
+            <!-- Cache de second niveau -->
+            <property name="hibernate.cache.use_second_level_cache" value="false"/>
+            
+            <!-- Optimisations supplémentaires -->
+            <property name="hibernate.jdbc.fetch_size" value="50"/>
+            <property name="hibernate.default_batch_fetch_size" value="20"/>
+        </properties>
+    </persistence-unit>
+</persistence>
