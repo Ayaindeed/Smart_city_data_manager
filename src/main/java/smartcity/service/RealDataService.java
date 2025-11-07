@@ -42,19 +42,21 @@ public class RealDataService {
             java.util.Properties prop = new java.util.Properties();
             java.io.InputStream input = RealDataService.class.getClassLoader().getResourceAsStream("config.properties");
             
-            if (input == null) {
+            if (input != null) {
+                prop.load(input);
+                
+                // Lecture des propriétés
+                OPENWEATHER_API_KEY = prop.getProperty("weather.api.key");
+                WEATHER_URL = prop.getProperty("weather.api.url");
+                WAQI_API_KEY = prop.getProperty("waqi.api.key");
+                
+                input.close();
+            } else {
                 System.err.println("❌ Impossible de trouver config.properties");
-                return;
+                OPENWEATHER_API_KEY = "";
+                WEATHER_URL = "";
+                WAQI_API_KEY = "";
             }
-            
-            prop.load(input);
-            
-            // Lecture des propriétés
-            OPENWEATHER_API_KEY = prop.getProperty("weather.api.key");
-            WEATHER_URL = prop.getProperty("weather.api.url");
-            WAQI_API_KEY = prop.getProperty("waqi.api.key");
-            
-            input.close();
         } catch (java.io.IOException ex) {
             System.err.println("❌ Erreur lors du chargement de la configuration: " + ex.getMessage());
         }

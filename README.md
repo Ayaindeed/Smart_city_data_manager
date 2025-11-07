@@ -46,9 +46,23 @@ FLUSH PRIVILEGES;
 mvn clean package
 ```
 
-3. Déployer sur WildFly :
+3. Configuration des API :
+```bash
+# Copier le fichier de configuration exemple
+cp src/main/resources/config.properties.example src/main/resources/config.properties
+
+# Éditer le fichier avec votre clé API
+# Remplacer 'your_api_key_here' par votre vraie clé API OpenWeather
+```
+
+4. Déployer sur WildFly :
 - Copier le WAR généré dans `target/smartcity.war`
 - Déployer via la console d'administration WildFly
+
+⚠️ **Important : Sécurité**
+- Ne jamais commiter le fichier `config.properties` contenant des clés API
+- Utiliser des variables d'environnement en production
+- La clé API peut être fournie via la variable d'environnement `WEATHER_API_KEY`
 
 ## Structure du Projet
 
