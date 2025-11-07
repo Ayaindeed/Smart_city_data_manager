@@ -36,3 +36,10 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Configuration Files ###
+src/main/resources/config.properties
+*.env
+.env*
+application-*.properties
+!application-example.properties

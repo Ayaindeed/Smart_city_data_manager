@@ -29,12 +29,36 @@ import java.util.ArrayList;
 public class RealDataService {
     
     // 🔑 Clés API
-    private static final String OPENWEATHER_API_KEY = "f694a8fee5524a79aacb88ad2299255d";
-    private static final String WAQI_API_KEY = "demo"; // Remplacer par vraie clé sur waqi.info
+    private static String OPENWEATHER_API_KEY;
+    private static String WAQI_API_KEY;
     
     // 🌐 URLs API
-    private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
-    private static final String AIR_QUALITY_URL = "https://api.waqi.info/feed";
+    private static String WEATHER_URL;
+    private static String AIR_QUALITY_URL = "https://api.waqi.info/feed";
+    
+    // Chargement de la configuration
+    static {
+        try {
+            java.util.Properties prop = new java.util.Properties();
+            java.io.InputStream input = RealDataService.class.getClassLoader().getResourceAsStream("config.properties");
+            
+            if (input == null) {
+                System.err.println("❌ Impossible de trouver config.properties");
+                return;
+            }
+            
+            prop.load(input);
+            
+            // Lecture des propriétés
+            OPENWEATHER_API_KEY = prop.getProperty("weather.api.key");
+            WEATHER_URL = prop.getProperty("weather.api.url");
+            WAQI_API_KEY = prop.getProperty("waqi.api.key");
+            
+            input.close();
+        } catch (java.io.IOException ex) {
+            System.err.println("❌ Erreur lors du chargement de la configuration: " + ex.getMessage());
+        }
+    }
     
     private final SensorDao sensorDao;
     private final MeasurementDao measurementDao;
@@ -44,6 +68,17 @@ public class RealDataService {
         this.sensorDao = new SensorDao();
         this.measurementDao = new MeasurementDao();
         this.objectMapper = new ObjectMapper();
+        
+        // Vérification des clés API au démarrage
+        if (OPENWEATHER_API_KEY == null || WEATHER_URL == null) {
+            System.err.println("⚠️ Configuration API manquante. Vérifiez config.properties");
+        }
+    }
+    
+    private void checkApiKeys() {
+        if (OPENWEATHER_API_KEY == null || OPENWEATHER_API_KEY.trim().isEmpty()) {
+            throw new IllegalStateException("❌ Clé API OpenWeather non configurée dans config.properties");
+        }
     }
     
     /**
@@ -53,6 +88,7 @@ public class RealDataService {
         List<Measurement> measurements = new ArrayList<>();
         
         try {
+            checkApiKeys();
             String urlString = WEATHER_URL + "?q=" + cityName + "&appid=" + OPENWEATHER_API_KEY + "&units=metric";
             String jsonResponse = makeHttpRequest(urlString);
             
